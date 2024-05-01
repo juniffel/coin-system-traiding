@@ -95,9 +95,9 @@ def main():
                 t.sleep(1)
             # 포지션 확인
             if (now.minute>=58) and (positionReset==0):
-                positions = positions()
+                position = positions()
                 asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
-                    positions,
+                    position,
                     headers="firstrow",
                     tablefmt="plain",
                     showindex=True,
