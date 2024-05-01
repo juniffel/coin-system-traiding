@@ -69,11 +69,8 @@ def positions():
     entry = float(posi['avgPrice'][0])
     mark = float(posi['markPrice'][0])
     leverage = float( posi['leverage'][0])
-    side =  1 if posi['side'][0] =='Buy' else -1 
-    if side=='Buy':
-        posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
-    elif side=='Sell':
-        posi['pnl'] = -round((((mark-entry)/mark)*100*leverage),2)
+    posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
+    posi[posi['side']=='Sell','pnl'] = -posi[posi['side']=='Sell','pnl'] 
     return posi[['symbol','pnl']].transpose()
 # 메인함수
 def main():
