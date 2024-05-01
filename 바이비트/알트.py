@@ -90,20 +90,17 @@ def main():
                 tickersReset = 0
                 positionReset = 0
                 t.sleep(60)
+            # 종목 탐색
             if (now.minute>=58) and (tickersReset==0):
                 tickers = searcher()
                 # tickers = pd.concat([tickers[:10],tickers[-10:]]) 
-                # print('선정된 종목')
-                # print('-'*50)
-                # print(tickers[['symbol',  'price24hPcnt', 'turnover24h', 'volume24h', ]])  
-                # print('-'*50) 
                 tickersReset=1       
                 t.sleep(1)
-                
+            # 포지션 확인
             if (now.minute>=58) and (positionReset==0):
-                position = positions()
+                positions = positions()
                 asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
-                    position,
+                    positions,
                     headers="firstrow",
                     tablefmt="plain",
                     showindex=True,
@@ -113,17 +110,13 @@ def main():
                 ))
                 positionReset=1
                 t.sleep(1)
-                
+            # 전략 탐색
             if (now.minute>=59) and (not tickers.empty):
                 targets = pd.concat(
                     [targets, strategy_alert(list(tickers["symbol"]), '60')],
                     ignore_index=True,
                 )
-<<<<<<< HEAD
-            
-=======
-                t.sleep(1)
->>>>>>> 6cad6f8d2cd5ab0de9968ae11c8718913f2fdc14
+            # 타겟 알림
             if not targets.empty:
                 set_margin_leverage(targets,10)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
@@ -137,17 +130,10 @@ def main():
                     stralign="left",
                     )}</code></pre>'''
                 ))
-<<<<<<< HEAD
-                targets = pd.DataFrame()
-                
-            if targets.empty:
-                t.sleep(60)# 타겟 초기화
-=======
-                targets = pd.DataFrame()  # 타겟 초기화
+                targets = pd.DataFrame()# 타겟 초기화
                 
             if targets.empty:
                 t.sleep(60)
->>>>>>> 6cad6f8d2cd5ab0de9968ae11c8718913f2fdc14
             t.sleep(1)
             
     except Exception as e:
