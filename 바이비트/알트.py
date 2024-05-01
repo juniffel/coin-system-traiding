@@ -70,7 +70,7 @@ def positions():
     mark = float(posi['markPrice'][0])
     leverage = float( posi['leverage'][0])
     posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
-    posi[posi['side']=='Sell','pnl'] = -posi[posi['side']=='Sell','pnl'] 
+    posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
     return posi[['symbol','pnl']].transpose()
 # 메인함수
 def main():
