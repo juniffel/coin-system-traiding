@@ -72,6 +72,7 @@ def main():
         asyncio.run(tg.tele_bot('시작'))
         tickersReset = 0
         positionReset = 0
+        tickers = pd.DataFrame()
         targets = pd.DataFrame()
         while 1:
             now  = dt.now()
@@ -81,12 +82,12 @@ def main():
                 positionReset = 0
                 t.sleep(60)
             if (now.minute>=58) and (tickersReset==0):
-                tickers = cl.all_tickers()
-                tickers = pd.concat([tickers[:10],tickers[-10:]]) 
-                print('선정된 종목')
-                print('-'*50)
-                print(tickers[['symbol',  'price24hPcnt', 'turnover24h', 'volume24h', ]])  
-                print('-'*50) 
+                tickers = searcher()
+                # tickers = pd.concat([tickers[:10],tickers[-10:]]) 
+                # print('선정된 종목')
+                # print('-'*50)
+                # print(tickers[['symbol',  'price24hPcnt', 'turnover24h', 'volume24h', ]])  
+                # print('-'*50) 
                 tickersReset=1       
                 t.sleep(1)
                 
@@ -98,11 +99,10 @@ def main():
                 
             if (now.minute>=59) and (not tickers.empty):
                 targets = pd.concat(
-                    [targets, strategy_alert(list(tickers["symbol"]), 60)],
+                    [targets, strategy_alert(list(tickers["symbol"]), '60')],
                     ignore_index=True,
                 )
-            if targets.empty:
-                t.sleep(60)
+                t.sleep(1)
             if not targets.empty:
                 set_margin_leverage(targets,10)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
@@ -117,6 +117,9 @@ def main():
                     )}</code></pre>'''
                 ))
                 targets = pd.DataFrame()  # 타겟 초기화
+                
+            if targets.empty:
+                t.sleep(60)
             t.sleep(1)
             
     except Exception as e:
