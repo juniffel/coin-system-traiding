@@ -12,7 +12,7 @@ testnet = False
 class BybitAPI:
 
     def __init__(self):
-        with open('C://Users//wnsdu//Desktop//coin//바이비트//key.txt') as f:
+        with open('/home/joon/바탕화면/coin/바이비트/key.txt') as f:
             lines = f.readlines()
             api_key = lines[0].strip()
             secret = lines[1].strip()
