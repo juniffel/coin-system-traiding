@@ -96,7 +96,7 @@ def main():
                 positionReset=1
                 t.sleep(1)
                 
-            if (now.minute>=59) and (not tickers.empty):
+            if (now.minute>=59) and () and (not tickers.empty):
                 targets = pd.concat(
                     [targets, strategy_alert(list(tickers["symbol"]), 60)],
                     ignore_index=True,
