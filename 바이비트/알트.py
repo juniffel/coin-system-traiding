@@ -12,13 +12,13 @@ from tabulate import tabulate
 import traceback
 import asyncio
 
-c = pc.BybitAPI()
+cl = pc.BybitAPI()
 
 # 종목 선별
 def searcher():
     # return pd.concat(c.all_tickers()['symbol'][:10],c.all_tickers()['symbol'][:10])
-    df =  c.all_tickers()
-    return df[df['turnover24h']>4e+06].reset_index(drop = True) 
+    tickers =  cl.all_tickers()
+    return tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)[:150]
 
 # 전략
 def strategy(df, interval):
@@ -43,7 +43,7 @@ def strategy_alert(tickers, interval):
     targets = []
     start = t.time()
     for idx, i in enumerate(tickers):
-        df = c.klines(i, interval, 70)
+        df = cl.klines(i, interval, 70)
         # print(i)
         if len(df) >= 70:
             case = strategy(df, interval)
@@ -61,8 +61,8 @@ def strategy_alert(tickers, interval):
 # 마진타입 레버리지 세팅
 def set_margin_leverage(targets, leverage):
         for i in targets.종목:
-            c.set_marginType(i, 1, leverage)
-            c.set_leverage(i,leverage)
+            cl.set_marginType(i, 1, leverage)
+            cl.set_leverage(i,leverage)
             
 def positions():
     pass
@@ -81,7 +81,7 @@ def main():
                 positionReset = 0
                 t.sleep(60)
             if (now.minute>=58) and (tickersReset==0):
-                tickers = c.all_tickers()
+                tickers = cl.all_tickers()
                 tickers = pd.concat([tickers[:10],tickers[-10:]]) 
                 print('선정된 종목')
                 print('-'*50)
@@ -92,15 +92,17 @@ def main():
                 
             if (now.minute>=58) and (positionReset==0):
                 print('포지션 확인')
-                postion = c.position_info(settleCoin='USDT')
+                postion = cl.position_info(settleCoin='USDT')
                 positionReset=1
                 t.sleep(1)
                 
-            if (now.minute>=59) and () and (not tickers.empty):
+            if (now.minute>=59) and (not tickers.empty):
                 targets = pd.concat(
                     [targets, strategy_alert(list(tickers["symbol"]), 60)],
                     ignore_index=True,
                 )
+            if targets.empty:
+                t.sleep(60)
             if not targets.empty:
                 set_margin_leverage(targets,10)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
