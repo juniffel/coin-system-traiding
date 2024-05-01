@@ -7,7 +7,7 @@ import sys
 import tele as tg
 import pandas as pd
 import pybitClass as pc
-import indicators as idt
+import 바이비트.indicators as idt
 from tabulate import tabulate
 import traceback
 import asyncio
@@ -27,15 +27,15 @@ def strategy(df, interval):
     bb60 = idt.Bollinger_Band(df,60)
 
     l_case = (
-        (h.iloc[1]<bb60.iloc[1])
-    and (c.iloc[0]>bb60.iloc[0])
-    and (ch.iloc[0]>1)
-    )
+		(h.iloc[-2]<bb60.upper.iloc[-2]) 
+	and (c.iloc[-1]>bb60.upper.iloc[-1]) 
+	and (ch.iloc[-1]>1)
+	)
     s_case = (
-        (l.iloc[1]>bb60.iloc[1])
-    and (c.iloc[0]<bb60.iloc[0])
-    and (ch.iloc[0]<-1)
-    )
+		(l.iloc[-2]>bb60.lower.iloc[-2]) 
+	and (c.iloc[-1]<bb60.lower.iloc[-1]) 
+	and (ch.iloc[-1]<-1)
+	)
     return l_case,s_case
 
 # 전략 알림?

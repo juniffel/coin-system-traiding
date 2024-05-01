@@ -50,7 +50,7 @@ class BybitAPI:
         df['date'] = pd.to_datetime(df['date'], unit='ms') 
         for col in df.columns[1:]: 
             df[col ] = pd.to_numeric(df[col])
-        return df
+        return df.sort_values('date', ascending=True).reset_index(drop = True)
     
     def coin_info(self, symbol):
         return pd.DataFrame(self.session.get_instruments_info(
