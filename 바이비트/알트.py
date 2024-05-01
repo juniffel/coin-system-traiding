@@ -18,7 +18,7 @@ c = pc.BybitAPI()
 def searcher():
     # return pd.concat(c.all_tickers()['symbol'][:10],c.all_tickers()['symbol'][:10])
     df =  c.all_tickers()
-    return df[df['turnover24h']>4e+06].reset_index(drop = True)
+    return df[df['turnover24h']>4e+06].reset_index(drop = True) 
 
 # 전략
 def strategy(df, interval):
@@ -62,12 +62,14 @@ def strategy_alert(tickers, interval):
 def set_margin_leverage(targets, leverage):
         for i in targets.종목:
             c.set_marginType(i, 1, leverage)
+            c.set_leverage(i,leverage)
             
 def positions():
     pass
 # 메인함수
 def main():
     try:
+        asyncio.run(tg.tele_bot('시작'))
         tickersReset = 0
         positionReset = 0
         targets = pd.DataFrame()
@@ -79,11 +81,17 @@ def main():
                 positionReset = 0
                 t.sleep(60)
             if (now.minute>=58) and (tickersReset==0):
-                tickers = pd.concat(c.all_tickers()[:10],c.all_tickers()[-10:])    
+                tickers = c.all_tickers()[:10]
+                tickers = pd.concat([tickers[:10],tickers[-10:]]) 
+                print('선정된 종목')
+                print('-'*50)
+                print(tickers[['symbol',  'price24hPcnt', 'turnover24h', 'volume24h', ]])  
+                print('-'*50) 
                 tickersReset=1       
                 t.sleep(1)
                 
             if (now.minute>=58) and (positionReset==0):
+                print('포지션 확인')
                 postion = c.position_info(settleCoin='USDT')
                 positionReset=1
                 t.sleep(1)

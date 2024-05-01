@@ -12,7 +12,7 @@ testnet = False
 class BybitAPI:
 
     def __init__(self):
-        with open('key.txt') as f:
+        with open('/home/joon/바탕화면/coin/바이비트/key.txt') as f:
             lines = f.readlines()
             api_key = lines[0].strip()
             secret = lines[1].strip()
@@ -108,7 +108,7 @@ class BybitAPI:
             return self.session.switch_margin_mode(
                     category="linear",
                     symbol=symbol,
-                    tradeMode=type, # cross:0, isolated:1
+                    tradeMode=type, 
                     buyLeverage=str(leverage),
                     sellLeverage=str(leverage),
                 )

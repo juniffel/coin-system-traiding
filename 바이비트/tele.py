@@ -7,7 +7,7 @@ async def  tele_bot(message, reply=None): #실행시킬 함수명 임의지정
     message :  전송할 메세지 str
     """
     # token
-    with open('알트토큰.txt') as f:
+    with open('/home/joon/바탕화면/coin/바이비트/알트토큰.txt') as f:
         lines = f.readlines()
         token = lines[0].strip()
         id = lines[1].strip()
