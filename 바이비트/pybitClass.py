@@ -12,7 +12,7 @@ testnet = False
 class BybitAPI:
 
     def __init__(self):
-        with open('/home/joon/바탕화면/coin/바이비트/key.txt') as f:
+        with open('C://Users//wnsdu//Desktop//coin//바이비트//key.txt') as f:
             lines = f.readlines()
             api_key = lines[0].strip()
             secret = lines[1].strip()
@@ -82,12 +82,25 @@ class BybitAPI:
         )
     def position_info(self, symbol=None, settleCoin = None):
         # 포지션 정보
-        return pd.DataFrame(self.session.get_positions(
+        df = pd.DataFrame(self.session.get_positions(
             category="linear",
             symbol=symbol,
             settleCoin  = settleCoin
         )['result']['list'])
-    
+        df = df.astype({'positionIdx':float,'riskId':float,
+            'riskLimitValue':float,
+            'size':float,'avgPrice':float,
+            'positionValue':float,'tradeMode':float	,
+            'autoAddMargin':float,'adlRankIndicator':float,
+            'leverage':float,'positionBalance':float,'markPrice':float,
+            'liqPrice':float,'bustPrice':float,'positionMM':float,
+            'positionIM':float,'takeProfit':float,'stopLoss':float,
+            'trailingStop':float,'unrealisedPnl':float,'cumRealisedPnl':float,
+            'curRealisedPnl':float,'seq':float,'createdTime':float,
+            'updatedTime':float
+            })
+        return df
+            
     def set_leverage(self, symbol, leverage):
         #레버리지 설정
         try:

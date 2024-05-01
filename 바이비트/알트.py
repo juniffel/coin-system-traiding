@@ -65,7 +65,16 @@ def set_margin_leverage(targets, leverage):
             cl.set_leverage(i,leverage)
             
 def positions():
-    pass
+    posi = cl.position_info(settleCoin = 'USDT')
+    entry = float(posi['avgPrice'][0])
+    mark = float(posi['markPrice'][0])
+    leverage = float( posi['leverage'][0])
+    side =  1 if posi['side'][0] =='Buy' else -1 
+    if side=='Buy':
+        posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
+    elif side=='Sell':
+        posi['pnl'] = -round((((mark-entry)/mark)*100*leverage),2)
+    return posi[['symbol','pnl']].transpose()
 # 메인함수
 def main():
     try:
@@ -91,8 +100,16 @@ def main():
                 t.sleep(1)
                 
             if (now.minute>=58) and (positionReset==0):
-                print('포지션 확인')
-                postion = cl.position_info(settleCoin='USDT')
+                position = positions()
+                asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
+                    position,
+                    headers="firstrow",
+                    tablefmt="plain",
+                    showindex=True,
+                    numalign="left",
+                    stralign="left",
+                    )}</code></pre>'''
+                ))
                 positionReset=1
                 t.sleep(1)
                 
@@ -101,8 +118,7 @@ def main():
                     [targets, strategy_alert(list(tickers["symbol"]), 60)],
                     ignore_index=True,
                 )
-            if targets.empty:
-                t.sleep(60)
+            
             if not targets.empty:
                 set_margin_leverage(targets,10)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
@@ -116,7 +132,10 @@ def main():
                     stralign="left",
                     )}</code></pre>'''
                 ))
-                targets = pd.DataFrame()  # 타겟 초기화
+                targets = pd.DataFrame()
+                
+            if targets.empty:
+                t.sleep(60)# 타겟 초기화
             t.sleep(1)
             
     except Exception as e:
