@@ -7,7 +7,7 @@ import sys
 import tele as tg
 import pandas as pd
 import pybitClass as pc
-import 바이비트.indicators as idt
+import indicators as idt
 from tabulate import tabulate
 import traceback
 import asyncio
