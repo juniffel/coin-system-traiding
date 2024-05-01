@@ -81,7 +81,7 @@ def main():
                 positionReset = 0
                 t.sleep(60)
             if (now.minute>=58) and (tickersReset==0):
-                tickers = c.all_tickers()[:10]
+                tickers = c.all_tickers()
                 tickers = pd.concat([tickers[:10],tickers[-10:]]) 
                 print('선정된 종목')
                 print('-'*50)
@@ -98,7 +98,7 @@ def main():
                 
             if (now.minute>=59) and (not tickers.empty):
                 targets = pd.concat(
-                    [targets, strategy_alert(list(tickers["symbol"]), "60")],
+                    [targets, strategy_alert(list(tickers["symbol"]), 60)],
                     ignore_index=True,
                 )
             if not targets.empty:
