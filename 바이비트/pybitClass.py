@@ -87,7 +87,7 @@ class BybitAPI:
             symbol=symbol,
             settleCoin  = settleCoin
         )['result']['list'])
-        df = df.astype({'positionIdx':float,'riskId':float,
+        df = df.astype({
             'riskLimitValue':float,
             'size':float,'avgPrice':float,
             'positionValue':float,'tradeMode':float	,
