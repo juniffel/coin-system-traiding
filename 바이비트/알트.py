@@ -73,7 +73,7 @@ def positions():
         posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
         posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
         return posi[['symbol','pnl']].transpose()
-    return 0
+    return pd.DataFrame()
 # 메인함수
 def main():
     try:
