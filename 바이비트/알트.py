@@ -73,6 +73,7 @@ def positions():
         posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
         posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
         return posi[['symbol','pnl']].transpose()
+    return 0
 # 메인함수
 def main():
     try:
@@ -97,15 +98,16 @@ def main():
             # 포지션 확인
             if (now.minute>=58) and (positionReset==0):
                 position = positions()
-                asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
-                    position,
-                    headers="firstrow",
-                    tablefmt="plain",
-                    showindex=True,
-                    numalign="left",
-                    stralign="left",
-                    )}</code></pre>'''
-                ))
+                if position!=0:
+                    asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
+                        position,
+                        headers="firstrow",
+                        tablefmt="plain",
+                        showindex=True,
+                        numalign="left",
+                        stralign="left",
+                        )}</code></pre>'''
+                    ))
                 positionReset=1
                 t.sleep(1)
             # 전략 탐색
