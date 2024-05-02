@@ -66,12 +66,13 @@ def set_margin_leverage(targets, leverage):
             
 def positions():
     posi = cl.position_info(settleCoin = 'USDT')
-    entry = float(posi['avgPrice'][0])
-    mark = float(posi['markPrice'][0])
-    leverage = float( posi['leverage'][0])
-    posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
-    posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
-    return posi[['symbol','pnl']].transpose()
+    if not posi.empty:
+        entry = float(posi['avgPrice'][0])
+        mark = float(posi['markPrice'][0])
+        leverage = float( posi['leverage'][0])
+        posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
+        posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
+        return posi[['symbol','pnl']].transpose()
 # 메인함수
 def main():
     try:

@@ -87,18 +87,19 @@ class BybitAPI:
             symbol=symbol,
             settleCoin  = settleCoin
         )['result']['list'])
-        df = df.astype({
-            'riskLimitValue':float,
-            'size':float,'avgPrice':float,
-            'positionValue':float,'tradeMode':float	,
-            'autoAddMargin':float,'adlRankIndicator':float,
-            'leverage':float,'positionBalance':float,'markPrice':float,
-            'liqPrice':float,'bustPrice':float,'positionMM':float,
-            'positionIM':float,'takeProfit':float,'stopLoss':float,
-            'trailingStop':float,'unrealisedPnl':float,'cumRealisedPnl':float,
-            'curRealisedPnl':float,'seq':float,'createdTime':float,
-            'updatedTime':float
-            })
+        if not df.empty:
+            df = df.astype({
+                'riskLimitValue':float,
+                'size':float,'avgPrice':float,
+                'positionValue':float,'tradeMode':float	,
+                'autoAddMargin':float,'adlRankIndicator':float,
+                'leverage':float,'positionBalance':float,'markPrice':float,
+                'liqPrice':float,'bustPrice':float,'positionMM':float,
+                'positionIM':float,'takeProfit':float,'stopLoss':float,
+                'trailingStop':float,'unrealisedPnl':float,'cumRealisedPnl':float,
+                'curRealisedPnl':float,'seq':float,'createdTime':float,
+                'updatedTime':float
+                })
         return df
             
     def set_leverage(self, symbol, leverage):
