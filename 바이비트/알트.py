@@ -17,8 +17,9 @@ cl = pc.BybitAPI()
 # 종목 선별
 def searcher():
     # return pd.concat(c.all_tickers()['symbol'][:10],c.all_tickers()['symbol'][:10])
-    tickers =  cl.all_tickers()
-    return tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)[:150]
+    tickers =  cl.all_tickers()[:150]
+    return tickers
+    # return tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)
 
 # 전략
 def strategy(df, interval):
@@ -43,7 +44,7 @@ def strategy(df, interval):
 # 전략 알림?
 def strategy_alert(tickers, interval):
     targets = []
-    start = t.time()
+    # start = t.time()
     for idx, i in enumerate(tickers):
         df = cl.klines(i, interval, 70)
         # print(i)
@@ -56,7 +57,7 @@ def strategy_alert(tickers, interval):
                 target = {"종목": i, "순위": f'{idx + 1}위', '전략':'숏'}
                 targets.append(target)
     end = t.time()
-    print(f"{end - start:.5f} sec")
+    # print(f"{end - start:.5f} sec")
     
     return pd.DataFrame(targets)
 
