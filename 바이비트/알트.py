@@ -20,7 +20,7 @@ def searcher():
     tickers =  cl.all_tickers()
     # return tickers
     tickers = tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)
-    tickers = pd.concat([tickers[:70],tickers[-70:]])
+    return pd.concat([tickers[:70],tickers[-70:]])
 
 # 전략
 def strategy(df, interval):
