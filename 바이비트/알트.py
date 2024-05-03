@@ -50,10 +50,10 @@ def strategy_alert(tickers, interval):
         if len(df) >= 70:
             case = strategy(df, interval)
             if case[0]:
-                target = {"종목": i, "순위": f'{idx + 1}위', '단위':interval, '전략':'롱'}
+                target = {"종목": i, "순위": f'{idx + 1}위', '전략':'롱'}
                 targets.append(target)
             if case[1]:
-                target = {"종목": i, "순위": f'{idx + 1}위', '단위':interval, '전략':'숏'}
+                target = {"종목": i, "순위": f'{idx + 1}위', '전략':'숏'}
                 targets.append(target)
     end = t.time()
     print(f"{end - start:.5f} sec")
@@ -122,7 +122,7 @@ def main():
             if not targets.empty:
                 set_margin_leverage(targets,5)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
-                targets = targets.transpose()
+                targets = targets
                 asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
                     targets,
                     headers="firstrow",
