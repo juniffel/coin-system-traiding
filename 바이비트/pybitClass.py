@@ -35,7 +35,7 @@ class BybitAPI:
                         'nextFundingTime':float, 'deliveryTime':float, 
                         'ask1Size':float, 'bid1Price':float, 
                         'ask1Price':float, 'bid1Size':float})
-        return df.sort_values('turnover24h', ascending=False).reset_index(drop = True)
+        return df.sort_values('price24hPcnt', ascending=False).reset_index(drop = True)
 
     def klines(self, symbol, interval, limit, category='linear' ):
         df = pd.DataFrame(self.session.get_kline(

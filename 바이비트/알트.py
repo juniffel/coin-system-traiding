@@ -17,9 +17,10 @@ cl = pc.BybitAPI()
 # 종목 선별
 def searcher():
     # return pd.concat(c.all_tickers()['symbol'][:10],c.all_tickers()['symbol'][:10])
-    tickers =  cl.all_tickers()[:150]
-    return tickers
-    # return tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)
+    tickers =  cl.all_tickers()
+    # return tickers
+    tickers = tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)
+    tickers = pd.concat([tickers[:70],tickers[-70:]])
 
 # 전략
 def strategy(df, interval):
