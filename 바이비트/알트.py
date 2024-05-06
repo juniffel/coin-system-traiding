@@ -33,12 +33,14 @@ def strategy(df, interval):
 	and (c.iloc[-1]>bb60.upper.iloc[-1])
     and (c.iloc[-1]>max(h.iloc[-10:-1]))
 	and (ch.iloc[-1]>1)
+    and (o.iloc[-1]>bb60.middle.iloc[-1])
 	)
     s_case = (
 		(l.iloc[-2]>bb60.lower.iloc[-2]) 
 	and (c.iloc[-1]<bb60.lower.iloc[-1]) 
     and (c.iloc[-1]<min(l.iloc[-10:-1]))
 	and (ch.iloc[-1]<-1)
+    and (o.iloc[-1]<bb60.middle.iloc[-1])
 	)
     return l_case,s_case
 
