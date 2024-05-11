@@ -1,0 +1,1 @@
+service ntp restart && systemctl start ntp && systemctl status ntp && ntpq -p
