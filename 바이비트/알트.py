@@ -56,10 +56,10 @@ def strategy_alert(tickers, interval):
         if len(df) >= 70:
             case = strategy(df, interval)
             if case[0]:
-                target = {"종목": i, '전략':'롱', }
+                target = {"종목": i, '전략':'롱'}
                 targets.append(target)
             if case[1]:
-                target = {"종목": i, '전략':'숏', }
+                target = {"종목": i, '전략':'숏'}
                 targets.append(target)
     end = t.time()
     # print(f"{end - start:.5f} sec")
