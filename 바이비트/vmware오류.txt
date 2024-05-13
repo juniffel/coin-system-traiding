@@ -1,0 +1,14 @@
+openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=VMWare" 
+sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./MOK.priv ./MOK.der $(modinfo -n vmmon) 
+sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./MOK.priv ./MOK.der $(modinfo -n vmnet) 
+sudo su  # 안에서 아래 실행
+
+
+mokutil --import MOK.der 
+
+input password:        # 재부팅 때 입력할 임시 비밀번호 입력 
+input password again: 
+exit 
+sudo shutdown -r now
+
+후에 enroll mok 선택 패스워드 입력후 재부팅

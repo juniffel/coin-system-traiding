@@ -19,7 +19,7 @@ def searcher():
     # return pd.concat(c.all_tickers()['symbol'][:10],c.all_tickers()['symbol'][:10])
     tickers =  cl.all_tickers()
     # return tickers
-    tickers = tickers[tickers['turnover24h']>4e+06].reset_index(drop = True)
+    tickers = tickers[tickers['turnover24h']>4e+06]
     return pd.concat([tickers[:70],tickers[-70:]])
 
 # 전략
@@ -56,10 +56,10 @@ def strategy_alert(tickers, interval):
         if len(df) >= 70:
             case = strategy(df, interval)
             if case[0]:
-                target = {"종목": i, "순위": f'{idx + 1}위', '전략':'롱'}
+                target = {"종목": i, '전략':'롱', }
                 targets.append(target)
             if case[1]:
-                target = {"종목": i, "순위": f'{idx + 1}위', '전략':'숏'}
+                target = {"종목": i, '전략':'숏', }
                 targets.append(target)
     end = t.time()
     # print(f"{end - start:.5f} sec")
@@ -80,7 +80,10 @@ def positions():
         leverage = float( posi['leverage'][0])
         posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
         posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
-        return posi[['symbol','pnl']].transpose()
+        posi = posi[['symbol','pnl']]
+        asset = cl.wallet()
+        posi = posi.join(asset)
+        return posi.transpose()
     return pd.DataFrame()
 # 메인함수
 def main():

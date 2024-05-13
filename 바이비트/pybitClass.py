@@ -153,10 +153,12 @@ class BybitAPI:
         
     def wallet(self,):
         #자산 정보
-        return pd.DataFrame(self.session.get_wallet_balance(
+        df = pd.DataFrame(self.session.get_wallet_balance(
             accountType="CONTRACT",
-            coin="BTC",
-        )['result']['list'][0]['coin'])
+            coin="USDT",
+        )['result']['list'][0]['coin'])[['equity','walletBalance','availableToWithdraw']]
+        df = df.astype({'equity':float,'walletBalance':float,'availableToWithdraw':float})
+        return df
     
     
     def account_info(self,):
