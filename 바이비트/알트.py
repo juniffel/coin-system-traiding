@@ -1,4 +1,4 @@
-import warnings 
+import warnings
 
 warnings.filterwarnings("ignore")
 from datetime import datetime as dt
@@ -27,18 +27,19 @@ def strategy(df, interval):
     o, h, l, c, v = df.open, df.high, df.low, df.close, df.volume
     ch = round(((c / o) - 1) * 100, 3)
     bb60 = idt.Bollinger_Band(df,60,2.1)
+    bb60_2 = idt.Bollinger_Band(df,60,2.2)
 
     l_case = (
-		(h.iloc[-2]<bb60.upper.iloc[-2]) 
-	and (c.iloc[-1]>bb60.upper.iloc[-1])
+		(h.iloc[-2]<bb60.upper.iloc[-2])
+	and (c.iloc[-1]>bb60_2.upper.iloc[-1])
     and (c.iloc[-1]>max(c.iloc[-60:-1]))
 	and (ch.iloc[-1]>3)
     and (o.iloc[-1]>bb60.middle.iloc[-1])
     and (ch.iloc[-2]<ch.iloc[-1])
 	)
     s_case = (
-		(l.iloc[-2]>bb60.lower.iloc[-2]) 
-	and (c.iloc[-1]<bb60.lower.iloc[-1]) 
+		(l.iloc[-2]>bb60.lower.iloc[-2])
+	and (c.iloc[-1]<bb60_2.lower.iloc[-1])
     and (c.iloc[-1]<min(c.iloc[-60:-1]))
 	and (ch.iloc[-1]<-3)
     and (o.iloc[-1]<bb60.middle.iloc[-1])
@@ -63,7 +64,7 @@ def strategy_alert(tickers, interval):
                 targets.append(target)
     end = t.time()
     # print(f"{end - start:.5f} sec")
-    
+
     return pd.DataFrame(targets)
 
 # 마진타입 레버리지 세팅
@@ -71,7 +72,7 @@ def set_margin_leverage(targets, leverage):
         for i in targets.종목:
             cl.set_marginType(i, 1, leverage)
             cl.set_leverage(i,leverage)
-            
+
 def positions():
     posi = cl.position_info(settleCoin = 'USDT')
     if not posi.empty:
@@ -79,7 +80,7 @@ def positions():
         mark = float(posi['markPrice'][0])
         leverage = float( posi['leverage'][0])
         posi['pnl'] = round((((mark-entry)/mark)*100*leverage),2)
-        posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl'] 
+        posi.loc[posi['side']=='Sell','pnl'] = -posi.loc[posi['side']=='Sell','pnl']
         posi = posi[['symbol','pnl']]
         asset = cl.wallet()
         posi = posi.join(asset)
@@ -103,8 +104,8 @@ def main():
             # 종목 탐색
             if (now.minute>=58) and (tickersReset==0):
                 tickers = searcher()
-                # tickers = pd.concat([tickers[:10],tickers[-10:]]) 
-                tickersReset=1       
+                # tickers = pd.concat([tickers[:10],tickers[-10:]])
+                tickersReset=1
                 t.sleep(1)
             # 포지션 확인
             if (now.minute>=58) and (positionReset==0):
@@ -142,11 +143,11 @@ def main():
                     )}</code></pre>'''
                 ))
                 targets = pd.DataFrame()# 타겟 초기화
-                
+
             if targets.empty:
                 t.sleep(60)
             t.sleep(1)
-            
+
     except Exception as e:
         err_msg = traceback.format_exc()
         # print(err_msg)
