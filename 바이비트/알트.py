@@ -129,7 +129,7 @@ def main():
                 )
             # 타겟 알림
             if not targets.empty:
-                set_margin_leverage(targets,5)# 마진타입, 레버리지 세팅
+                set_margin_leverage(targets,4)# 마진타입, 레버리지 세팅
                 targets['종목'] = targets.종목.str.replace('USDT','')
                 targets = targets
                 asyncio.run(tg.tele_bot(f'''<pre><code class="language-python">{tabulate(
