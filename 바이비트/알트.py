@@ -30,6 +30,7 @@ def strategy(df, interval):
     bb60_2 = idt.Bollinger_Band(df,60,2.2)
 
     l_case = (
+		(h.iloc[-3]<bb60.upper.iloc[-3])
 		(h.iloc[-2]<bb60.upper.iloc[-2])
 	and (c.iloc[-1]>bb60_2.upper.iloc[-1])
     and (c.iloc[-1]>max(c.iloc[-60:-1]))
@@ -38,6 +39,7 @@ def strategy(df, interval):
     and (ch.iloc[-2]<ch.iloc[-1])
 	)
     s_case = (
+		(l.iloc[-3]>bb60.lower.iloc[-3])
 		(l.iloc[-2]>bb60.lower.iloc[-2])
 	and (c.iloc[-1]<bb60_2.lower.iloc[-1])
     and (c.iloc[-1]<min(c.iloc[-60:-1]))
