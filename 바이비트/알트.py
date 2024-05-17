@@ -27,12 +27,12 @@ def strategy(df, interval):
     o, h, l, c, v = df.open, df.high, df.low, df.close, df.volume
     ch = round(((c / o) - 1) * 100, 3)
     bb60 = idt.Bollinger_Band(df,60,2.1)
-    bb60_2 = idt.Bollinger_Band(df,60,2.2)
+    # bb60_2 = idt.Bollinger_Band(df,60,2.2)
 
     l_case = (
 		(h.iloc[-3]<bb60.upper.iloc[-3])
 	and (h.iloc[-2]<bb60.upper.iloc[-2])
-	and (c.iloc[-1]>bb60_2.upper.iloc[-1])
+	and (c.iloc[-1]>bb60.upper.iloc[-1])
     and (c.iloc[-1]>max(c.iloc[-60:-1]))
 	and (ch.iloc[-1]>3)
     and (o.iloc[-1]>bb60.middle.iloc[-1])
@@ -41,7 +41,7 @@ def strategy(df, interval):
     s_case = (
 		(l.iloc[-3]>bb60.lower.iloc[-3])
 	and (l.iloc[-2]>bb60.lower.iloc[-2])
-	and (c.iloc[-1]<bb60_2.lower.iloc[-1])
+	and (c.iloc[-1]<bb60.lower.iloc[-1])
     and (c.iloc[-1]<min(c.iloc[-60:-1]))
 	and (ch.iloc[-1]<-3)
     and (o.iloc[-1]<bb60.middle.iloc[-1])
