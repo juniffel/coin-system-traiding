@@ -26,7 +26,7 @@ def searcher():
 def strategy(df, interval):
     o, h, l, c, v = df.open, df.high, df.low, df.close, df.volume
     ch = round(((c / o) - 1) * 100, 3)
-    bb60 = idt.Bollinger_Band(df,60,2.1)
+    bb60 = idt.Bollinger_Band(df,60,2.0)
     bb60_2 = idt.Bollinger_Band(df,60,2.2)
 
     l_case = (
