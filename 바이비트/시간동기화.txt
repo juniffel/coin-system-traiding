@@ -1,2 +1,5 @@
-service ntp restart && systemctl start ntp && systemctl status ntp 
+service ntp restart && systemctl start ntp && systemctl status ntp
 ntpq -p
+
+//따로임 위에껄 하든지 아래껄 하든지
+sudo systemctl restart systemd-timesyncd
