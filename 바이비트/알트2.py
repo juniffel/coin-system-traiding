@@ -31,9 +31,11 @@ def strategy(df, interval):
     # ma10 = idt.ma(df,10)
 
     l_case = (
-		(h.iloc[-1]<max(h.iloc[-15:-1]))
+		(h.iloc[-1]<max(h.iloc[-6:-1]))
+	and (c.iloc[-1]<max(c.iloc[-6:-1]))
 	and (10>=ch.iloc[-1]>=2)
     and (ch.iloc[-2]<0)
+    and (ch.iloc[-3]<0)
     and (c.iloc[-1]>o.iloc[-2])
     and (h.iloc[-1]>h.iloc[-2])
     )
