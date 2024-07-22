@@ -4,7 +4,7 @@ import os
 import pandas as pd
 from pybit.unified_trading import HTTP, WebSocket
 pd.set_option("display.max_columns", None)
-# pd.set_option('display.max_rows', None)
+pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
 ########  Defines ###########################
 testnet = False
@@ -82,7 +82,7 @@ class BybitAPI:
             symbol=symbol,
             orderId=orderId,
         )
-    def position_info(self, symbol=None, settleCoin = None):
+    def position_info(self, symbol=None, settleCoin = 'USDT'):
         # 포지션 정보
         df = pd.DataFrame(self.session.get_positions(
             category="linear",
